@@ -54,7 +54,7 @@ describe("DispatchedClient", () => {
     });
   });
 
-  describe("getJobStatus", () => {
+  describe("getJob", () => {
     it("should successfully get job status", async () => {
       const mockResponse: JobResponse = {
         jobId: "123",
@@ -66,7 +66,7 @@ describe("DispatchedClient", () => {
         json: () => Promise.resolve(mockResponse),
       });
 
-      const result = await client.getJobStatus("123");
+      const result = await client.getJob("123");
 
       expect(global.fetch).toHaveBeenCalledWith(
         `${mockBaseUrl}/jobs/123`,
@@ -81,7 +81,7 @@ describe("DispatchedClient", () => {
     });
 
     it("should throw error for empty jobId", async () => {
-      await expect(client.getJobStatus("")).rejects.toThrow(
+      await expect(client.getJob("")).rejects.toThrow(
         "Job ID is required"
       );
     });
@@ -130,7 +130,7 @@ describe("DispatchedClient", () => {
         json: () => Promise.resolve(errorResponse),
       });
 
-      await expect(client.getJobStatus("123")).rejects.toThrow(
+      await expect(client.getJob("123")).rejects.toThrow(
         "BadRequest: Invalid request"
       );
     });

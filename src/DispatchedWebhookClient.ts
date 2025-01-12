@@ -20,11 +20,9 @@ export class DispatchedWebhookClient {
     authorization: string | null,
     rawBody: string
   ): Promise<WebhookPayload> {
-    // Verify Authorization header
-    if (!authorization || (authorization !== `Bearer ${this.webhookSecret}` && authorization !== this.webhookSecret)) {
+    if (!this.isAuthValid(authorization)) {
       throw new Error("Invalid webhook signature");
     }
-
     if (!rawBody) {
       throw new Error("Invalid webhook payload");
     }
@@ -46,9 +44,17 @@ export class DispatchedWebhookClient {
       return payload;
     } catch (error) {
       if (error instanceof SyntaxError) {
-        throw new Error("Invalid JSON in webhook payload");
+        throw new Error("Invalid webhook payload");
       }
       throw error;
     }
+  }
+
+  private isAuthValid(authorization: string | null): boolean {
+    if (!authorization) {
+      return false;
+    }
+    authorization = authorization.trim();
+    return authorization === `Bearer ${this.webhookSecret}` || authorization === this.webhookSecret;
   }
 }

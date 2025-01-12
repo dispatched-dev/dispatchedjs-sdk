@@ -21,7 +21,16 @@ describe("DispatchedWebhookClient", () => {
       const rawBody = JSON.stringify(validPayload);
       const authorization = `Bearer ${mockWebhookSecret}`;
 
-      const result = await client.verify(authorization, rawBody);
+      const result = await client.getVerifiedPayload(authorization, rawBody);
+
+      expect(result).toEqual(validPayload);
+    });
+
+    it("should successfully verify valid webhook request if the `Bearer` keyword is missing", async () => {
+      const rawBody = JSON.stringify(validPayload);
+      const authorization = `${mockWebhookSecret}`;
+
+      const result = await client.getVerifiedPayload(authorization, rawBody);
 
       expect(result).toEqual(validPayload);
     });
@@ -30,7 +39,7 @@ describe("DispatchedWebhookClient", () => {
       const rawBody = JSON.stringify(validPayload);
       const authorization = "Bearer invalid-secret";
 
-      await expect(client.verify(authorization, rawBody)).rejects.toThrow(
+      await expect(client.getVerifiedPayload(authorization, rawBody)).rejects.toThrow(
         "Invalid webhook signature"
       );
     });
@@ -38,7 +47,7 @@ describe("DispatchedWebhookClient", () => {
     it("should throw error for missing authorization", async () => {
       const rawBody = JSON.stringify(validPayload);
 
-      await expect(client.verify(null, rawBody)).rejects.toThrow(
+      await expect(client.getVerifiedPayload(null, rawBody)).rejects.toThrow(
         "Invalid webhook signature"
       );
     });
@@ -47,7 +56,7 @@ describe("DispatchedWebhookClient", () => {
       const rawBody = "invalid-json";
       const authorization = `Bearer ${mockWebhookSecret}`;
 
-      await expect(client.verify(authorization, rawBody)).rejects.toThrow(
+      await expect(client.getVerifiedPayload(authorization, rawBody)).rejects.toThrow(
         "Invalid JSON in webhook payload"
       );
     });
@@ -60,7 +69,7 @@ describe("DispatchedWebhookClient", () => {
       const rawBody = JSON.stringify(invalidPayload);
       const authorization = `Bearer ${mockWebhookSecret}`;
 
-      await expect(client.verify(authorization, rawBody)).rejects.toThrow(
+      await expect(client.getVerifiedPayload(authorization, rawBody)).rejects.toThrow(
         "Invalid webhook payload structure"
       );
     });
