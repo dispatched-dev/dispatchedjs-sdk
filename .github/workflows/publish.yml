@@ -32,7 +32,7 @@ jobs:
         run: |
           git reset --hard
           git config --local --list
-          git checkout master
+          git checkout main
           git config user.email "info@dispatched.dev"
           git config user.name "Dispatched"
 
