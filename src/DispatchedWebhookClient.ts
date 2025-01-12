@@ -15,10 +15,10 @@ export class DispatchedWebhookClient {
    * @param rawBody - The raw request body as string
    * @throws Error if authentication fails
    */
-  async getVerifiedPayload(
+  async getVerifiedPayload<T = any>(
     authorization: string | null | undefined,
     rawBody: any
-  ): Promise<WebhookPayload> {
+  ): Promise<WebhookPayload<T>> {
     if (this.debug) {
         console.log("getVerifiedPayload()", {
           authorization,
@@ -38,7 +38,7 @@ export class DispatchedWebhookClient {
 
     try {
       // Parse and validate payload
-      const payload = JSON.parse(rawBody) as WebhookPayload;
+      const payload = JSON.parse(rawBody) as WebhookPayload<T>;
 
       // Validate required fields
       if (
@@ -67,7 +67,10 @@ export class DispatchedWebhookClient {
     if (!authorization) {
       return false;
     }
-    return authorization === `Bearer ${this.webhookSecret}` || authorization === this.webhookSecret;
+    return (
+      authorization === `Bearer ${this.webhookSecret}` ||
+      authorization === this.webhookSecret
+    );
   }
 
   private getRedactedAuth(authorization?: string|null): string {

@@ -34,11 +34,11 @@ export interface DispatchedError {
   };
 }
 
-export interface WebhookPayload {
+export interface WebhookPayload<T = any> {
   jobId: string;
   attempt: string;
   attemptNumber: number;
-  payload: JobPayload;
+  payload: T;
 }
 
 export interface WebhookClientConfig {
