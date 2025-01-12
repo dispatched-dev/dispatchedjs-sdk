@@ -1,4 +1,4 @@
-# DispatchedJs - SDK
+# DispatchedJS - SDK
 
 This is a TypeScript helper library for node.js server side to integrate [Dispatched](https://dispatched.dev) into your application.
 

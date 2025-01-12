@@ -1,7 +1,7 @@
 {
   "name": "@dispatchedjs/sdk",
-  "version": "0.0.1",
-  "description": "Dispatched SDK for JavaScript",
+  "version": "1.0.0",
+  "description": "DispatchedJS SDK for JavaScript",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
   "types": "dist/index.d.ts",
