@@ -84,6 +84,26 @@ try {
 
 ```
 
+## Debugging
+
+Pass the `debug` option as `true` to the clients.
+
+```typescript
+
+// client
+const client = new DispatchedClient({
+    apiKey: process.env.DISPATCHED_API_KEY,
+    debug: true
+});
+
+// webhook client
+const webhookClient = new DispatchedWebhookClient({
+    webhookSecret: process.env.DISPATCHED_WEBHOOK_SECRET,
+    debug: true
+});
+
+```
+
 ## Local Development
 
 When developing locally, you can use the  [Dispatched CLI](https://github.com/dispatched-dev/dispatchedjs-cli) to start a local server that will receive webhook callbacks.
@@ -94,16 +114,33 @@ When developing locally, you can use the  [Dispatched CLI](https://github.com/di
 npm install -g @dispatchedjs/cli
 ```
 
-2. Start the local server:
+2. Start the local server (this would run the local sever at `http://localhost:3100`):
 ```bash
 dispatchedjs listen --secret="any-webhook-secret-for-local-dev" --forward="http://localhost:3000/path/to/webhook/endpoint" --port=3100 
 ```
 Options:
 - `--secret` is the secret you want to use to verify the webhook requests. For security reasons, it is recommended to use a different secret than the one you use in production (you can use something simple like "abc123" for local development).
 - `--forward` is the URL that Dispatched will send the webhook requests to.
-- `--port` is the port you want the server to listen on. It defaults to 3100.
+- `--port` (optional) is the port you want the server to listen on. It defaults to `3100`.
 
 NOTE: Scheduled jobs will be processed immediately when using the local server.
+
+3. Override the `baseUrl` to point to the local server in your code:
+
+```bash
+# .env
+DISPATCHED_API_BASE_URL=http://localhost:3100
+```
+
+```typescript
+const client = new DispatchedClient({
+    apiKey: process.env.DISPATCHED_API_KEY,
+    baseUrl: process.env.DISPATCHED_API_BASE_URL
+});
+```
+
+NOTE: You can pass an empty string to `DISPATCHED_API_BASE_URL` to use the default (production) Dispatched API URL.
+Simply leave the `baseUrl: process.env.DISPATCHED_API_BASE_URL` in the source code and not set the `env` variable in production.
 
 ## License
 

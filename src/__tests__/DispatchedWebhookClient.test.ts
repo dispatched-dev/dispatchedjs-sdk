@@ -57,7 +57,7 @@ describe("DispatchedWebhookClient", () => {
       const authorization = `Bearer ${mockWebhookSecret}`;
 
       await expect(client.getVerifiedPayload(authorization, rawBody)).rejects.toThrow(
-        "Invalid JSON in webhook payload"
+        "Invalid webhook payload: Invalid JSON body"
       );
     });
 

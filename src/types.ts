@@ -24,6 +24,7 @@ export interface JobResponse {
 export interface DispatchedConfig {
   apiKey: string;
   baseUrl?: string;
+  debug?: boolean;
 }
 
 export interface DispatchedError {
@@ -42,4 +43,5 @@ export interface WebhookPayload {
 
 export interface WebhookClientConfig {
   webhookSecret: string;
+  debug?: boolean;
 }

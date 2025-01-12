@@ -34,7 +34,7 @@ describe("DispatchedClient", () => {
       const result = await client.dispatchJob(payload);
 
       expect(global.fetch).toHaveBeenCalledWith(
-        `${mockBaseUrl}/jobs/dispatch`,
+        `${mockBaseUrl}/api/jobs/dispatch`,
         expect.objectContaining({
           method: "POST",
           headers: expect.objectContaining({
@@ -69,7 +69,7 @@ describe("DispatchedClient", () => {
       const result = await client.getJob("123");
 
       expect(global.fetch).toHaveBeenCalledWith(
-        `${mockBaseUrl}/jobs/123`,
+        `${mockBaseUrl}/api/jobs/123`,
         expect.objectContaining({
           method: "GET",
           headers: expect.objectContaining({
@@ -102,7 +102,7 @@ describe("DispatchedClient", () => {
       const result = await client.cancelJob("123");
 
       expect(global.fetch).toHaveBeenCalledWith(
-        `${mockBaseUrl}/jobs/123`,
+        `${mockBaseUrl}/api/jobs/123`,
         expect.objectContaining({
           method: "DELETE",
           headers: expect.objectContaining({
