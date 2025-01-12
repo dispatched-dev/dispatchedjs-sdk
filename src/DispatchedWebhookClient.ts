@@ -16,10 +16,10 @@ export class DispatchedWebhookClient {
    * @param rawBody - The raw request body as string
    * @throws Error if authentication fails
    */
-  async getVerifiedPayload(
+  async getVerifiedPayload<T = any>(
     authorization: string | null,
     rawBody: string
-  ): Promise<WebhookPayload> {
+  ): Promise<WebhookPayload<T>> {
     if (!this.isAuthValid(authorization)) {
       throw new Error("Invalid webhook signature");
     }
@@ -29,7 +29,7 @@ export class DispatchedWebhookClient {
 
     try {
       // Parse and validate payload
-      const payload = JSON.parse(rawBody) as WebhookPayload;
+      const payload = JSON.parse(rawBody) as WebhookPayload<T>;
 
       // Validate required fields
       if (
@@ -55,6 +55,9 @@ export class DispatchedWebhookClient {
       return false;
     }
     authorization = authorization.trim();
-    return authorization === `Bearer ${this.webhookSecret}` || authorization === this.webhookSecret;
+    return (
+      authorization === `Bearer ${this.webhookSecret}` ||
+      authorization === this.webhookSecret
+    );
   }
 }
