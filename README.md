@@ -3,6 +3,8 @@
 This is a TypeScript helper library for node.js server side to integrate [https://dispatched.dev](https://dispatched.dev) into your application.
 Perfect fot Next.js, Express, Koa, Hapi, Fastify, etc.
 
+![NPM Version](https://img.shields.io/npm/v/%40dispatchedjs%2Fsdk?style=flat) ![License](https://img.shields.io/npm/l/%40dispatchedjs%2Fsdk?style=flat) ![example workflow](https://github.com/dispatched-dev/dispatchedjs-sdk/actions/workflows/main.yml/badge.svg)
+
 ## Installation
 
 ```bash
