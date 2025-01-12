@@ -1,7 +1,7 @@
 {
   "name": "@dispatchedjs/sdk",
-  "version": "1.0.0",
-  "description": "DispatchedJS SDK for JavaScript",
+  "version": "1.0.1",
+  "description": "DispatchedJS - SDK for JavaScript",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
   "types": "dist/index.d.ts",
@@ -19,6 +19,14 @@
     "browser"
   ],
   "author": "Dispatched <info@dispatched.dev>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dispatched-dev/dispatchedjs-sdk.git"
+  },
+  "bugs": {
+    "url": "https://github.com/dispatched-dev/dispatchedjs-sdk/issues"
+  },
+  "homepage": "https://dispatched.dev/",
   "license": "MIT",
   "devDependencies": {
     "@rollup/plugin-typescript": "^8.3.0",

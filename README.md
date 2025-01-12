@@ -1,6 +1,7 @@
 # DispatchedJS - SDK
 
-This is a TypeScript helper library for node.js server side to integrate [Dispatched](https://dispatched.dev) into your application.
+This is a TypeScript helper library for node.js server side to integrate [https://dispatched.dev](https://dispatched.dev) into your application.
+Perfect fot Next.js, Express, Koa, Hapi, Fastify, etc.
 
 ## Installation
 
