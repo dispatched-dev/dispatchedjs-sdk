@@ -17,7 +17,7 @@
     "typescript",
     "browser"
   ],
-  "author": "Your Name",
+  "author": "Dispatched <info@dispatched.dev>",
   "license": "MIT",
   "devDependencies": {
     "@rollup/plugin-typescript": "^8.3.0",
