@@ -1,7 +1,7 @@
 {
   "name": "@dispatchedjs/sdk",
   "version": "0.0.1",
-  "description": "SDK for Dispatched",
+  "description": "SDK & CLI for Dispatched",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
   "types": "dist/index.d.ts",

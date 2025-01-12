@@ -1,57 +1,107 @@
-# DispatchedJs/sdk
+# DispatchedJs - SDK & CLI
 
-A browser-compatible TypeScript library providing DataManager and ApiClient classes.
+This is a TypeScript helper library for node.js server side to integrate [Dispatched](https://dispatched.dev) into your application.
 
 ## Installation
 
 ```bash
-npm install your-library-name
+npm install @dispatchedjs/sdk
 ```
 
 ## Usage
 
+### Dispatching a job
+
 ```typescript
-import { DataManager, ApiClient } from "your-library-name";
+import { DispatchedClient } from "@dispatchedjs/sdk";
 
-// Using DataManager
-const dataManager = new DataManager();
-dataManager.set("key", "value");
-console.log(dataManager.get("key")); // 'value'
+const client = new DispatchedClient({
+    apiKey: process.env.DISPATCHED_API_KEY
+});
 
-// Using ApiClient
-const apiClient = new ApiClient("https://api.example.com");
-const data = await apiClient.get("/endpoint");
+// dispatch a job immediately
+const myPayload1 = { action: "example-action", data: "example-data" }; // must be serializable
+const job1 = await client.dispatchJob(myPayload1, {
+    maxRetries: 3,
+});
+console.log(job1); // { jobId: 'job_1234567890abcdef', status: 'QUEUED' }
+
+// schedule for later
+const myPayload2 = { action: "example-action", data: "example-data" }; // must be serializable
+const job2 = await client.dispatchJob(myPayload1, {
+    sheduleFor: new Date("2024-12-17T12:00:00Z"),
+});
+console.log(job2); // { jobId: 'job_1234567890abcdef', status: 'QUEUED' }
+
 ```
 
-## Classes
+### Checking job status
 
-### DataManager
+```typescript
 
-A simple key-value store manager.
+const client = new DispatchedClient({
+    apiKey: process.env.DISPATCHED_API_KEY
+});
 
-Methods:
+const jobId = "job_1234567890abcdef"; // from a job that was previously dispatched
 
-- `set(key: string, value: any)`: Store a value
-- `get(key: string)`: Retrieve a value
-- `clear()`: Clear all stored data
-- `getAll()`: Get all stored data
+const job = await client.getJob(jobId);
+console.log(job); // { jobId: 'job_1234567890abcdef', status: 'QUEUED' }
 
-### ApiClient
+```
 
-A simple HTTP client for making API requests.
+### Cancelling a job
 
-Methods:
+```typescript
 
-- `get<T>(endpoint: string): Promise<T>`: Make GET request
-- `post<T>(endpoint: string, data: any): Promise<T>`: Make POST request
-- `setHeader(key: string, value: string)`: Set custom header
+// NOTE: Only jobs that are in the QUEUED state can be cancelled.
 
-## Development
+const client = new DispatchedClient({
+    apiKey: process.env.DISPATCHED_API_KEY
+});
 
-1. Clone the repository
-2. Install dependencies: `npm install`
-3. Build the library: `npm run build`
-4. Run tests: `npm test`
+const jobId = "job_1234567890abcdef"; // from a job that was previously dispatched
+
+const job = await client.cancelJob(jobId);
+console.log(job); // { jobId: 'job_1234567890abcdef', status: 'CANCELLED' }
+
+```
+
+### Handle Webhook Verification
+
+```typescript
+
+const webhookClient = new DispatchedWebhookClient({
+    webhookSecret: process.env.DISPATCHED_WEBHOOK_SECRET
+});
+
+try {
+    const payload = await webhookClient.getVerifiedPayload(req.headers.get('Authorization'), req.body);
+    // TODO: do something with your payload
+} catch (error) {
+    console.error(error);
+}
+
+```
+
+## Local Development
+
+When developing locally, you can use the  [Dispatched CLI](https://github.com/dispatched-dev/dispatchedjs-cli) to start a local server that will receive webhook callbacks.
+
+
+1. Install the CLI globally:
+```bash
+npm install -g @dispatchedjs/cli
+```
+
+2. Start the local server:
+```bash
+dispatchedjs listen --secret="any-webhook-secret-for-local-dev" --url="http://localhost:3000/path/to/webhook/endpoint" --port=3000 
+```
+Options:
+- `--secret` is the secret you want to use to verify the webhook requests. For security reasons, it is recommended to use a different secret than the one you use in production (you can use something simple like "abc123" for local development).
+- `--url` is the URL that Dispatched will send the webhook requests to.
+- `--port` is the port you want the server to listen on. It defaults to 3100.
 
 ## License
 

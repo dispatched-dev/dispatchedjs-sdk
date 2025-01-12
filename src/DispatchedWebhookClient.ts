@@ -11,18 +11,22 @@ export class DispatchedWebhookClient {
   }
 
   /**
-   * Verify and handle incoming webhook requests
+   * Verify and extract payload incoming webhook requests
    * @param authorization - The Authorization header from the webhook request
    * @param rawBody - The raw request body as string
    * @throws Error if authentication fails
    */
-  async verify(
+  async getVerifiedPayload(
     authorization: string | null,
     rawBody: string
   ): Promise<WebhookPayload> {
     // Verify Authorization header
-    if (!authorization || authorization !== `Bearer ${this.webhookSecret}`) {
+    if (!authorization || (authorization !== `Bearer ${this.webhookSecret}` && authorization !== this.webhookSecret)) {
       throw new Error("Invalid webhook signature");
+    }
+
+    if (!rawBody) {
+      throw new Error("Invalid webhook payload");
     }
 
     try {

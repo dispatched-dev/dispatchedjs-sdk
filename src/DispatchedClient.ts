@@ -12,7 +12,7 @@ export class DispatchedClient {
 
   constructor(config: DispatchedConfig) {
     this.apiKey = config.apiKey;
-    this.baseUrl = config.baseUrl || "https://dispatched.dev/api";
+    this.baseUrl = config.baseUrl || "https://dispatched.dev/";
   }
 
   private async request<T>(
@@ -25,7 +25,9 @@ export class DispatchedClient {
       ...options.headers,
     };
 
-    const response = await fetch(`${this.baseUrl}${endpoint}`, {
+    endpoint = endpoint.replace(/^\//, "");
+    const baseUrl = this.baseUrl.replace(/\/$/, "");
+    const response = await fetch(`${baseUrl}/${endpoint}`, {
       ...options,
       headers,
     });
@@ -46,12 +48,12 @@ export class DispatchedClient {
   /**
    * Queue a new job
    * @param payload - Payload
-   * @param request - Job configuration
+   * @param options - Job configuration
    * @returns Promise with job details
    */
   async dispatchJob(
     payload: JobPayload,
-    request: DispatchJobRequestOptions = {}
+    options: DispatchJobRequestOptions = {}
   ): Promise<JobResponse> {
     if (!payload || typeof payload !== "object") {
       throw new Error("Invalid payload: must be a non-null object");
@@ -60,29 +62,29 @@ export class DispatchedClient {
     const body = {
       payload: payload,
       scheduleFor:
-        request.scheduleFor instanceof Date
-          ? request.scheduleFor.toISOString()
-          : request.scheduleFor,
-      maxRetries: request.maxRetries,
+        options.scheduleFor instanceof Date
+          ? options.scheduleFor.toISOString()
+          : options.scheduleFor,
+      maxRetries: options.maxRetries,
     };
 
-    return this.request<JobResponse>("/jobs/dispatch", {
+    return this.request<JobResponse>("/api/jobs/dispatch", {
       method: "POST",
       body: JSON.stringify(body),
     });
   }
 
   /**
-   * Get the status of a job
+   * Get the job
    * @param jobId - The unique identifier of the job
    * @returns Promise with job details
    */
-  async getJobStatus(jobId: string): Promise<JobResponse> {
+  async getJob(jobId: string): Promise<JobResponse> {
     if (!jobId) {
       throw new Error("Job ID is required");
     }
 
-    return this.request<JobResponse>(`/jobs/${jobId}`, {
+    return this.request<JobResponse>(`/api/jobs/${jobId}`, {
       method: "GET",
     });
   }
@@ -98,7 +100,7 @@ export class DispatchedClient {
       throw new Error("Job ID is required");
     }
 
-    return this.request<JobResponse>(`/jobs/${jobId}`, {
+    return this.request<JobResponse>(`/api/jobs/${jobId}`, {
       method: "DELETE",
     });
   }
