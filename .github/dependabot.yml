@@ -5,6 +5,6 @@ updates:
   schedule:
     interval: daily
     time: "04:00"
-    timezone: America/Montreal
+    timezone: Australia/Melbourne
   open-pull-requests-limit: 5
   versioning-strategy: increase
