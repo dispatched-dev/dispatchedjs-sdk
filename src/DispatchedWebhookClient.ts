@@ -55,6 +55,9 @@ export class DispatchedWebhookClient {
       return false;
     }
     authorization = authorization.trim();
+    if (!authorization) {
+      return false;
+    }
     return authorization === `Bearer ${this.webhookSecret}` || authorization === this.webhookSecret;
   }
 }

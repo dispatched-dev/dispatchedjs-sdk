@@ -96,7 +96,7 @@ npm install -g @dispatchedjs/cli
 
 2. Start the local server:
 ```bash
-dispatchedjs listen --secret="any-webhook-secret-for-local-dev" --forward="http://localhost:3000/path/to/webhook/endpoint" --port=3000 
+dispatchedjs listen --secret="any-webhook-secret-for-local-dev" --forward="http://localhost:3000/path/to/webhook/endpoint" --port=3100 
 ```
 Options:
 - `--secret` is the secret you want to use to verify the webhook requests. For security reasons, it is recommended to use a different secret than the one you use in production (you can use something simple like "abc123" for local development).
