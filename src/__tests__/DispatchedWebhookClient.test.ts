@@ -12,7 +12,7 @@ describe("DispatchedWebhookClient", () => {
   describe("verify", () => {
     const validPayload: WebhookPayload = {
       jobId: "123",
-      attempt: "attempt-123",
+      attemptId: "attempt-123",
       attemptNumber: 1,
       payload: { data: "test" },
     };

@@ -36,7 +36,7 @@ export interface DispatchedError {
 
 export interface WebhookPayload<T = any> {
   jobId: string;
-  attempt: string;
+  attemptId: string;
   attemptNumber: number;
   payload: T;
 }

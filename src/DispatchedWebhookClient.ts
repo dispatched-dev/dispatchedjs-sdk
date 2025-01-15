@@ -43,7 +43,7 @@ export class DispatchedWebhookClient {
       // Validate required fields
       if (
         !payload.jobId ||
-        !payload.attempt ||
+        !payload.attemptId ||
         !payload.attemptNumber ||
         !payload.payload
       ) {
