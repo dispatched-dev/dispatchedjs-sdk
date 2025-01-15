@@ -39,9 +39,9 @@ describe("DispatchedWebhookClient", () => {
       const rawBody = JSON.stringify(validPayload);
       const authorization = "Bearer invalid-secret";
 
-      await expect(client.getVerifiedPayload(authorization, rawBody)).rejects.toThrow(
-        "Invalid webhook signature"
-      );
+      await expect(
+        client.getVerifiedPayload(authorization, rawBody)
+      ).rejects.toThrow("Invalid webhook signature");
     });
 
     it("should throw error for missing authorization", async () => {
@@ -52,13 +52,45 @@ describe("DispatchedWebhookClient", () => {
       );
     });
 
+    it("should throw error for empty authorization", async () => {
+      const rawBody = JSON.stringify(validPayload);
+
+      await expect(client.getVerifiedPayload("", rawBody)).rejects.toThrow(
+        "Invalid webhook signature"
+      );
+    });
+
+    it("should throw error for whitespace authorization", async () => {
+      const rawBody = JSON.stringify(validPayload);
+
+      await expect(client.getVerifiedPayload("   ", rawBody)).rejects.toThrow(
+        "Invalid webhook signature"
+      );
+    });
+
     it("should throw error for invalid JSON payload", async () => {
       const rawBody = "invalid-json";
       const authorization = `Bearer ${mockWebhookSecret}`;
 
-      await expect(client.getVerifiedPayload(authorization, rawBody)).rejects.toThrow(
-        "Invalid webhook payload: Invalid JSON body"
-      );
+      await expect(
+        client.getVerifiedPayload(authorization, rawBody)
+      ).rejects.toThrow("Invalid webhook payload: Invalid JSON body");
+    });
+
+    it("should throw error for empty body", async () => {
+      const authorization = `Bearer ${mockWebhookSecret}`;
+
+      await expect(
+        client.getVerifiedPayload(authorization, "")
+      ).rejects.toThrow("Invalid webhook payload: empty body");
+    });
+
+    it("should throw error for non-string body", async () => {
+      const authorization = `Bearer ${mockWebhookSecret}`;
+
+      await expect(
+        client.getVerifiedPayload(authorization, { some: "object" })
+      ).rejects.toThrow("Invalid webhook payload: body is not a string");
     });
 
     it("should throw error for missing required fields", async () => {
@@ -69,9 +101,65 @@ describe("DispatchedWebhookClient", () => {
       const rawBody = JSON.stringify(invalidPayload);
       const authorization = `Bearer ${mockWebhookSecret}`;
 
-      await expect(client.getVerifiedPayload(authorization, rawBody)).rejects.toThrow(
-        "Invalid webhook payload structure"
-      );
+      await expect(
+        client.getVerifiedPayload(authorization, rawBody)
+      ).rejects.toThrow("Invalid webhook payload structure");
+    });
+
+    it("should throw error for missing jobId", async () => {
+      const invalidPayload = {
+        attempt: "attempt-123",
+        attemptNumber: 1,
+        payload: { data: "test" },
+      };
+      const rawBody = JSON.stringify(invalidPayload);
+      const authorization = `Bearer ${mockWebhookSecret}`;
+
+      await expect(
+        client.getVerifiedPayload(authorization, rawBody)
+      ).rejects.toThrow("Invalid webhook payload structure");
+    });
+
+    it("should throw error for missing attempt", async () => {
+      const invalidPayload = {
+        jobId: "123",
+        attemptNumber: 1,
+        payload: { data: "test" },
+      };
+      const rawBody = JSON.stringify(invalidPayload);
+      const authorization = `Bearer ${mockWebhookSecret}`;
+
+      await expect(
+        client.getVerifiedPayload(authorization, rawBody)
+      ).rejects.toThrow("Invalid webhook payload structure");
+    });
+
+    it("should throw error for missing attemptNumber", async () => {
+      const invalidPayload = {
+        jobId: "123",
+        attempt: "attempt-123",
+        payload: { data: "test" },
+      };
+      const rawBody = JSON.stringify(invalidPayload);
+      const authorization = `Bearer ${mockWebhookSecret}`;
+
+      await expect(
+        client.getVerifiedPayload(authorization, rawBody)
+      ).rejects.toThrow("Invalid webhook payload structure");
+    });
+
+    it("should throw error for missing payload", async () => {
+      const invalidPayload = {
+        jobId: "123",
+        attempt: "attempt-123",
+        attemptNumber: 1,
+      };
+      const rawBody = JSON.stringify(invalidPayload);
+      const authorization = `Bearer ${mockWebhookSecret}`;
+
+      await expect(
+        client.getVerifiedPayload(authorization, rawBody)
+      ).rejects.toThrow("Invalid webhook payload structure");
     });
   });
 });
