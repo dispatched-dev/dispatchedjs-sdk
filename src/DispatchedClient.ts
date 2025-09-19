@@ -4,6 +4,7 @@ import type {
   DispatchJobRequestOptions,
   JobPayload,
   JobResponse,
+  UpdateJobOptions,
 } from "./types";
 
 export class DispatchedClient {
@@ -102,6 +103,39 @@ export class DispatchedClient {
 
     return this.request<JobResponse>(`/api/jobs/${jobId}`, {
       method: "DELETE",
+    });
+  }
+
+  /**
+   * Update a queued job
+   * @param jobId - The unique identifier of the job to update
+   * @param options - Update options (currently supports scheduledFor)
+   * @returns Promise with updated job details
+   * @throws Error if job is not in QUEUED status
+   */
+  async updateJob(jobId: string, options: UpdateJobOptions): Promise<JobResponse> {
+    if (!jobId) {
+      throw new Error("Job ID is required");
+    }
+
+    if (!options || typeof options !== "object") {
+      throw new Error("Update options are required");
+    }
+
+    if (!("scheduledFor" in options)) {
+      throw new Error("scheduledFor is required in update options");
+    }
+
+    const body = {
+      scheduledFor:
+        options.scheduledFor instanceof Date
+          ? options.scheduledFor.toISOString()
+          : options.scheduledFor,
+    };
+
+    return this.request<JobResponse>(`/api/jobs/${jobId}`, {
+      method: "PATCH",
+      body: JSON.stringify(body),
     });
   }
 }

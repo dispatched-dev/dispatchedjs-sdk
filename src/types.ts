@@ -15,6 +15,10 @@ export interface DispatchJobRequestOptions {
   maxRetries?: number;
 }
 
+export interface UpdateJobOptions {
+  scheduledFor: string | Date | null;
+}
+
 export interface JobResponse {
   jobId: string;
   status: JobStatus;
