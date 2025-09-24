@@ -119,12 +119,13 @@ npm install -g @dispatchedjs/cli
 
 2. Start the local server (this would run the local sever at `http://localhost:3100`):
 ```bash
-dispatchedjs listen --secret="any-webhook-secret-for-local-dev" --forward="http://localhost:3000/path/to/webhook/endpoint" --port=3100 
+dispatchedjs listen --secret="any-webhook-secret-for-local-dev" --forward="http://localhost:3000/path/to/webhook/endpoint" --port=3100 --scheduledDelay=60
 ```
 Options:
 - `--secret` is the secret you want to use to verify the webhook requests. For security reasons, it is recommended to use a different secret than the one you use in production (you can use something simple like "abc123" for local development).
 - `--forward` is the URL that Dispatched will send the webhook requests to.
 - `--port` (optional) is the port you want the server to listen on. It defaults to `3100`.
+- `--scheduledDelay` in seconds: any jobs scheduled for in the future will be dispatched after this time. This helps with not having to wait for hours during development.
 
 NOTE: Scheduled jobs will be processed immediately when using the local server.
 
