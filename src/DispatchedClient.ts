@@ -62,10 +62,10 @@ export class DispatchedClient {
 
     const body = {
       payload: payload,
-      scheduleFor:
-        options.scheduleFor instanceof Date
-          ? options.scheduleFor.toISOString()
-          : options.scheduleFor,
+      scheduledFor:
+        options.scheduledFor instanceof Date
+          ? options.scheduledFor.toISOString()
+          : options.scheduledFor,
       maxRetries: options.maxRetries,
     };
 

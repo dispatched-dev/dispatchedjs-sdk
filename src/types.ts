@@ -11,7 +11,7 @@ export interface JobPayload {
 }
 
 export interface DispatchJobRequestOptions {
-  scheduleFor?: string | Date;
+  scheduledFor?: string | Date;
   maxRetries?: number;
 }
 
